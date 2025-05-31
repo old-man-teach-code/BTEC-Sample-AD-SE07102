@@ -1,5 +1,7 @@
 package com.example.b3_se07102;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -26,6 +28,8 @@ public class MainActivity extends AppCompatActivity {
     private ArrayAdapter<String> tasksAdapter; // Khai báo ArrayAdapter để liên kết với ListView trong layout
 
     private static final int ADD_TASK_REQUEST_CODE = 1; // Nhận biết yêu cầu thêm task
+    private static final int EDIT_TASK_REQUEST_CODE = 2; // Nhận biết yêu cầu sửa task
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState); // Khởi tạo instance của Activity !!!
@@ -67,7 +71,30 @@ public class MainActivity extends AppCompatActivity {
            // id - Id của item trong danh sách
            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                String selectedTask = tasksList.get(position); // Lấy item được chọn từ từ listview TaskList theo vị trí position
-               Toast.makeText(MainActivity.this, "Selected: " + selectedTask, Toast.LENGTH_SHORT).show();
+               // Toast.makeText(MainActivity.this, "Selected: " + selectedTask, Toast.LENGTH_SHORT).show();
+               new AlertDialog.Builder(
+                       MainActivity.this
+               )
+                       .setTitle("Lựa chọn hành động")
+                       .setMessage("Bạn muốn xóa hay sửa " + selectedTask + " ?")
+                       .setPositiveButton("Xóa", new DialogInterface.OnClickListener() {
+
+                           @Override
+                           public void onClick(DialogInterface dialog, int which) {
+                               showDeleteConfirmationDialog(position);
+                           }
+                       })
+                       .setNegativeButton("Sửa", new DialogInterface.OnClickListener() {
+
+                           @Override
+                           public void onClick(DialogInterface dialog, int which) {
+                               Intent intent = new Intent(MainActivity.this, AddActivity.class);
+                               intent.putExtra("task", selectedTask);
+                               intent.putExtra("position", position);
+                               startActivityForResult(intent, EDIT_TASK_REQUEST_CODE);
+                           }
+                       }).show();
+
            }
        });
 
@@ -75,6 +102,23 @@ public class MainActivity extends AppCompatActivity {
         tasksList.add("Đi chợ");
         tasksList.add("Nấu cơm");
         tasksList.add("Đi tắm");
+    }
+
+    // Hàm tự khai báo: Hiển thị hộp thoại xác nhận xóa khi nhấn vào item trong ListView
+    private void showDeleteConfirmationDialog(final int position) { // Truyền vào vị trí của item trong ListView
+        final String selectedTask = tasksList.get(position); // Thấy nội dung của item được chọn
+        new AlertDialog.Builder(this) // Khởi tạo hộp thoại xác nhận xóa bằng AlertDialog.Builder
+                .setTitle("Xác nhận xóa") // Đặt tiêu đề cho hộp thoại
+                .setMessage("Bạn có chắc chắn muốn xóa " + selectedTask + "?") // Đặt nội dung cho hộp thoại
+                .setPositiveButton("Xác nhận xóa!", new DialogInterface.OnClickListener() { // Đặt sự kiện click cho nút "Xác nhận xóa"
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) { // Ghi đè method onClick (default của DialogInterface)
+                        tasksList.remove(position); // Xóa item khỏi tasksList (ArrayList, với method remove)
+                        tasksAdapter.notifyDataSetChanged(); // Thông báo cho ArrayAdapter để cập nhật dữ liệu trong ListView
+                    }
+                })
+                .setNegativeButton("Hủy", null) // Đặt sự kiện cho click hủy lựa chọn
+                .show();
     }
 
     @Override

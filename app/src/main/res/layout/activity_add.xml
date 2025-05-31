@@ -10,10 +10,11 @@
 
     <EditText
         android:id="@+id/edtTask"
-        android:layout_width="380dp"
-        android:layout_height="384dp"
+        android:layout_width="379dp"
+        android:layout_height="422dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="84dp"
+        android:background="#E4E4E4"
         android:ems="10"
         android:hint="Task description"
         android:inputType="text"
@@ -25,10 +26,25 @@
         android:id="@+id/btnSubmit"
         android:layout_width="383dp"
         android:layout_height="61dp"
-        android:text="Submit"
+        android:text="Create a new task"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/edtTask"
-        app:layout_constraintVertical_bias="0.137" />
+        app:layout_constraintVertical_bias="0.257" />
+
+    <TextView
+        android:id="@+id/tvScreenName"
+        style="@style/Widget.AppCompat.TextView.SpinnerItem"
+        android:layout_width="313dp"
+        android:layout_height="61dp"
+        android:text="Add Task"
+        android:textAlignment="center"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/edtTask"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.59" />
 </androidx.constraintlayout.widget.ConstraintLayout>
