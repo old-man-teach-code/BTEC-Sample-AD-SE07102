@@ -130,13 +130,25 @@ public class MainActivity extends AppCompatActivity {
         // Kiểm tra requestCode và resultCode
         super.onActivityResult(requestCode, resultCode, data);
         // Kiểm tra requestCode và resultCode để xác định đúng request và kết quả trả về có hợp lệ hay không
-        if (requestCode == ADD_TASK_REQUEST_CODE && resultCode == RESULT_OK && data != null){
+        if (resultCode == RESULT_OK && data != null){
+            boolean isEdit = false;
             // Lấy dữ liệu trả về từ data gửi từ AddTaskActivity
             // Giá trị này được lưu trữ với name là "task"
-            String newTask = data.getStringExtra("task");
-            if (newTask != null && !newTask.isEmpty()){ // Kiểm tra newTask có rỗng hay không
-                tasksList.add(newTask); // Thêm newTask vào tasksList để hiển thị trong ListView
-                tasksAdapter.notifyDataSetChanged(); // Thông báo cho ArrayAdapter để cập nhật dữ liệu trong ListView
+            String task = data.getStringExtra("task");
+            int position = data.getIntExtra("position", -1);
+            Toast.makeText(this, "Position: " + position + " Task: " + task, Toast.LENGTH_SHORT).show();
+
+            if (task != null && !task.isEmpty()){ // Kiểm tra newTask có rỗng hay không
+                if (position == -1) // Kiểm tra position có phải là -1 hay không
+                                    // Nếu là -1 thì task là một task mới (Vì task mới chưa có vị trí trong tasksList)
+                {
+                    tasksList.add(task); // Thêm newTask vào tasksList để hiển thị trong ListView
+                    tasksAdapter.notifyDataSetChanged(); // Thông báo cho ArrayAdapter để cập nhật dữ liệu trong ListView
+                } else {
+                    tasksList.set(position, task); // Thay đổi nội dung của item trong tasksList
+                    tasksAdapter.notifyDataSetChanged(); // Thông báo cho ArrayAdapter để cập nhật dữ liệu trong ListView
+                }
+
             }
         }
     }
