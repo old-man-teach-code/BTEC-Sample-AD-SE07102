@@ -1,5 +1,6 @@
 package com.example.b3_se07102;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -17,19 +18,22 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
     private Button btnAdd; // Khai báo Button để liên kết với button trong layout
-    private ListView lvTasks; // Khai báo ListView để liên kết với ListView trong layout
+    private RecyclerView rvTasks; // Khai báo RecyclerView để liên kết với RecyclerView trong layout
     private ArrayList<String> tasksList; // Khai báo ArrayList để lưu trữ danh sách các task
-    private ArrayAdapter<String> tasksAdapter; // Khai báo ArrayAdapter để liên kết với ListView trong layout
+    private TaskAdapter tasksAdapter; // Khai báo TaskAdapter để liên kết với ArrayAdapter
 
     private static final int ADD_TASK_REQUEST_CODE = 1; // Nhận biết yêu cầu thêm task
     private static final int EDIT_TASK_REQUEST_CODE = 2; // Nhận biết yêu cầu sửa task
 
+    @SuppressLint("NotifyDataSetChanged")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState); // Khởi tạo instance của Activity !!!
@@ -38,17 +42,15 @@ public class MainActivity extends AppCompatActivity {
 
         // Khởi tạo các biến
         btnAdd = findViewById(R.id.btnAddNew); // tham chiếu đến button trong layout bằng id (btnAddNew)
-        lvTasks = findViewById(R.id.lvTasks); // tham chiếu đến ListView trong layout bằng id (lvTasks)
+        rvTasks = findViewById(R.id.rvTasks); // tham chiếu đến RecyclerView trong layout bằng id (rvTasks)
 
         // Khởi tạo ArrayList và ArrayAdapter
         tasksList = new ArrayList<>();
-        // new ArrayAdapter - Khởi tạo giá trị rỗng
-        // this - Context của Activity hiện tại (MainActivity)
-        // android.R.layout.simple_list_item_1 - Layout mặc định cho mỗi item trong ListView
-        // tasksList - Danh sách các task (ArrayList - đã được khai báo bên trên)
-        tasksAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, tasksList);
+        tasksAdapter = new TaskAdapter(tasksList);
         // Gắn ArrayAdapter vào ListView
-        lvTasks.setAdapter(tasksAdapter);
+        rvTasks.setAdapter(tasksAdapter);
+
+        rvTasks.setLayoutManager(new LinearLayoutManager(this));
 
         btnAdd.setOnClickListener(new View.OnClickListener() { // cấu trúc tạo sự kiện click
             @Override // ghi đè phương thức onClick (cấu trúc sự kiện click)
@@ -61,47 +63,30 @@ public class MainActivity extends AppCompatActivity {
                 startActivityForResult(intent, ADD_TASK_REQUEST_CODE);
             }
         });
-        // Đặt sự kiện click cho ListView khi nhấn vào một item
-        lvTasks.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-           @Override
-           // Các giá trị tham số:
-           // parent - ListView chứa item được nhấn
-           // view - View của item được nhấn
-           // position - Vị trí của item trong danh sách
-           // id - Id của item trong danh sách
-           public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-               String selectedTask = tasksList.get(position); // Lấy item được chọn từ từ listview TaskList theo vị trí position
-               // Toast.makeText(MainActivity.this, "Selected: " + selectedTask, Toast.LENGTH_SHORT).show();
-               new AlertDialog.Builder(
-                       MainActivity.this
-               )
-                       .setTitle("Lựa chọn hành động")
-                       .setMessage("Bạn muốn xóa hay sửa " + selectedTask + " ?")
-                       .setPositiveButton("Xóa", new DialogInterface.OnClickListener() {
 
-                           @Override
-                           public void onClick(DialogInterface dialog, int which) {
-                               showDeleteConfirmationDialog(position);
-                           }
-                       })
-                       .setNegativeButton("Sửa", new DialogInterface.OnClickListener() {
-
-                           @Override
-                           public void onClick(DialogInterface dialog, int which) {
-                               Intent intent = new Intent(MainActivity.this, AddActivity.class);
-                               intent.putExtra("task", selectedTask);
-                               intent.putExtra("position", position);
-                               startActivityForResult(intent, EDIT_TASK_REQUEST_CODE);
-                           }
-                       }).show();
-
-           }
-       });
 
         tasksList.add("Đánh răng");
         tasksList.add("Đi chợ");
         tasksList.add("Nấu cơm");
         tasksList.add("Đi tắm");
+        tasksList.add("Đánh răng");
+        tasksList.add("Đi chợ");
+        tasksList.add("Nấu cơm");
+        tasksList.add("Đi tắm");
+        tasksList.add("Đánh răng");
+        tasksList.add("Đi chợ");
+        tasksList.add("Nấu cơm");
+        tasksList.add("Đi tắm");
+        tasksList.add("Đánh răng");
+        tasksList.add("Đi chợ");
+        tasksList.add("Nấu cơm");
+        tasksList.add("Đi tắm");
+        tasksList.add("Đánh răng");
+        tasksList.add("Đi chợ");
+        tasksList.add("Nấu cơm");
+        tasksList.add("Đi tắm");
+
+        tasksAdapter.notifyDataSetChanged();
     }
 
     // Hàm tự khai báo: Hiển thị hộp thoại xác nhận xóa khi nhấn vào item trong ListView
