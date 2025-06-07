@@ -64,6 +64,33 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        tasksAdapter.setOnItemClickListener(new TaskAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position, String selectedTask) {
+                new AlertDialog.Builder(
+                        MainActivity.this
+                )
+                        .setTitle("Lựa chọn hành động")
+                        .setMessage("Bạn muốn xóa hay sửa " + selectedTask + " ?")
+                        .setPositiveButton("Xóa", new DialogInterface.OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                showDeleteConfirmationDialog(position);
+                            }
+                        })
+                        .setNegativeButton("Sửa", new DialogInterface.OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Intent intent = new Intent(MainActivity.this, AddActivity.class);
+                                intent.putExtra("task", selectedTask);
+                                intent.putExtra("position", position);
+                                startActivityForResult(intent, EDIT_TASK_REQUEST_CODE);
+                            }
+                        }).show();
+            }
+        });
 
         tasksList.add("Đánh răng");
         tasksList.add("Đi chợ");

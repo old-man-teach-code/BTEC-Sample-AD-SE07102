@@ -12,6 +12,7 @@ import java.util.ArrayList;
 public class TaskAdapter extends RecyclerView.Adapter<TaskViewHolder>
 {
     private ArrayList<String> taskList; // Danh sách các task
+    private OnItemClickListener onItemClickListener; // Interface để xử lý sự kiện click item
 
     public TaskAdapter(ArrayList<String> taskList) {
         this.taskList = taskList; // Khởi tạo danh sách các task
@@ -33,6 +34,27 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskViewHolder>
         String task = taskList.get(position);
         // Gắn dữ liệu vào ViewHolder
         holder.tvTaskName.setText(task);
+
+        // Xử lý sự kiện click item
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) { // Ghi đè phương thức onClick (cấu trúc sự kiện click)
+                if (onItemClickListener != null) { // Kiểm tra interface có được khởi tạo hay không
+                    // Nếu chưa được khởi tạo thì không thực hiện lệnh dưới
+                    onItemClickListener.onItemClick(holder.getAdapterPosition(), task);
+                }
+            }
+        });
+    }
+
+    // Định nghĩa interface để xử lý sự kiện click item
+    public interface OnItemClickListener {
+        void onItemClick(int position, String task);
+    }
+
+    // Gắn interface vào adapter để xử lý sự kiện click item
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.onItemClickListener = listener;
     }
 
     @Override
