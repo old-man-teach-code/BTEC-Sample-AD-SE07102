@@ -40,6 +40,13 @@ public class MainActivity extends AppCompatActivity {
         EdgeToEdge.enable(this); // Khởi tạo EdgeToEdge cho Activity
         setContentView(R.layout.activity_main); // Gắn layout cho Activity !!!
 
+        if (!AppData.loginState){ // kiểm tra trạng thái đăng nhập (loginState) - AppData là static class
+            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+            startActivity(intent);
+        }
+
+        Toast.makeText(this, "Xin chao " + AppData.fullname, Toast.LENGTH_SHORT).show();
+
         // Khởi tạo các biến
         btnAdd = findViewById(R.id.btnAddNew); // tham chiếu đến button trong layout bằng id (btnAddNew)
         rvTasks = findViewById(R.id.rvTasks); // tham chiếu đến RecyclerView trong layout bằng id (rvTasks)
