@@ -30,6 +30,8 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<String> tasksList; // Khai báo ArrayList để lưu trữ danh sách các task
     private TaskAdapter tasksAdapter; // Khai báo TaskAdapter để liên kết với ArrayAdapter
 
+    private Button btnGoToAI;
+
     private Button btnLogout;
     private static final int ADD_TASK_REQUEST_CODE = 1; // Nhận biết yêu cầu thêm task
     private static final int EDIT_TASK_REQUEST_CODE = 2; // Nhận biết yêu cầu sửa task
@@ -56,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
         btnAdd = findViewById(R.id.btnAddNew); // tham chiếu đến button trong layout bằng id (btnAddNew)
         rvTasks = findViewById(R.id.rvTasks); // tham chiếu đến RecyclerView trong layout bằng id (rvTasks)
         btnLogout = findViewById(R.id.btnLogout);
+        btnGoToAI = findViewById(R.id.btnGoToAI);
         // Khởi tạo ArrayList và ArrayAdapter
         tasksList = new ArrayList<>();
         tasksAdapter = new TaskAdapter(tasksList);
@@ -70,6 +73,14 @@ public class MainActivity extends AppCompatActivity {
                      sessionManager.logout();
                  }
              });
+
+        btnGoToAI.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, GeminiApiActivity.class);
+                startActivity(intent);
+            }
+        });
 
         btnAdd.setOnClickListener(new View.OnClickListener() { // cấu trúc tạo sự kiện click
             @Override // ghi đè phương thức onClick (cấu trúc sự kiện click)
