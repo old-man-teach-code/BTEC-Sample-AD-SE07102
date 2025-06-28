@@ -18,6 +18,8 @@ public class LoginActivity extends AppCompatActivity {
     EditText edtPassword;
     Button btnLogin;
 
+    SessionManager sessionManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,6 +30,8 @@ public class LoginActivity extends AppCompatActivity {
         edtPassword = findViewById(R.id.edtPassword);
         btnLogin = findViewById(R.id.btnLogin);
 
+        sessionManager = new SessionManager(this);
+
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -35,12 +39,14 @@ public class LoginActivity extends AppCompatActivity {
                 String password = edtPassword.getText().toString();
 
                 if (username.equals("admin") && password.equals("admin")) {
-                    AppData.loginState = true;
-                    AppData.username = username;
-                    AppData.fullname = "Ha Ngoc Linh";
-                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                    startActivity(intent);
-                    finish();
+                    sessionManager.createLoginSession();
+                    sessionManager.checkLogin();
+//                    AppData.loginState = true;
+//                    AppData.username = username;
+//                    AppData.fullname = "Ha Ngoc Linh";
+//                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+//                    startActivity(intent);
+//                    finish();
                 } else {
                     Toast.makeText(LoginActivity.this, "Login failed", Toast.LENGTH_SHORT).show();
                 }
