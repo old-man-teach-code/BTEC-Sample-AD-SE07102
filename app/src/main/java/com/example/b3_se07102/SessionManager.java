@@ -1,7 +1,5 @@
 package com.example.b3_se07102;
 
-import static androidx.core.content.ContextCompat.startActivity;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;

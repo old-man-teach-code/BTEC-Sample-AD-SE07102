@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -27,15 +26,15 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
 
     private Button btnAdd; // Khai báo Button để liên kết với button trong layout
-    private Button btnLogout;
     private RecyclerView rvTasks; // Khai báo RecyclerView để liên kết với RecyclerView trong layout
     private ArrayList<String> tasksList; // Khai báo ArrayList để lưu trữ danh sách các task
     private TaskAdapter tasksAdapter; // Khai báo TaskAdapter để liên kết với ArrayAdapter
 
-    private SessionManager sessionManager;
-
+    private Button btnLogout;
     private static final int ADD_TASK_REQUEST_CODE = 1; // Nhận biết yêu cầu thêm task
     private static final int EDIT_TASK_REQUEST_CODE = 2; // Nhận biết yêu cầu sửa task
+
+    SessionManager sessionManager;
 
     @SuppressLint("NotifyDataSetChanged")
     @Override
@@ -46,20 +45,12 @@ public class MainActivity extends AppCompatActivity {
 
         sessionManager = new SessionManager(this);
         sessionManager.checkLogin();
-
-//        SharedPreferences prefs = getSharedPreferences("loginState", MODE_PRIVATE);
-//        boolean isLogin = false;
-//        isLogin = prefs.getBoolean("isLogin", false);
-//        if (!isLogin){
-//            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-//            startActivity(intent);
-//        }
-//        if (!AppData.loginState){ // kiểm tra trạng thái đăng nhập (loginState) - AppData là static class
+//        if (!sessionManager.isLogin()){ // kiểm tra trạng thái đăng nhập (loginState) - AppData là static class
 //            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
 //            startActivity(intent);
 //        }
 
-//        AppData.alertToast(this, "Chào mừng bạn đến với ứng dụng ToDoList", Toast.LENGTH_LONG);
+        Toast.makeText(this, "Xin chao " + AppData.fullname, Toast.LENGTH_SHORT).show();
 
         // Khởi tạo các biến
         btnAdd = findViewById(R.id.btnAddNew); // tham chiếu đến button trong layout bằng id (btnAddNew)
@@ -74,17 +65,11 @@ public class MainActivity extends AppCompatActivity {
         rvTasks.setLayoutManager(new LinearLayoutManager(this));
 
         btnLogout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                sessionManager.logout();
-//                SharedPreferences.Editor edt = prefs.edit();
-//                edt.putBoolean("isLogin", false);
-//                edt.apply();
-//
-//                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-//                startActivity(intent);
-            }
-        });
+                 @Override
+                 public void onClick(View v) {
+                     sessionManager.logout();
+                 }
+             });
 
         btnAdd.setOnClickListener(new View.OnClickListener() { // cấu trúc tạo sự kiện click
             @Override // ghi đè phương thức onClick (cấu trúc sự kiện click)
